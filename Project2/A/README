@@ -1,0 +1,97 @@
+//NAME: Simran Dhaliwal
+//EMAIL: sdhaliwal@ucla.edu
+//ID: 905361068
+
+Files Included:
+lab2_add.c, SortedList.h, SortedList.c, lab2_list.c, lab2_add.csv, lab2_list.csv
+lab2_add-1.png, lab2_add-2.png, lab2_add-3.png, lab2_add-4.png, lab2_add-5.png,
+lab2_list-1.png, lab2_list-2.png, lab2_list-3.png, lab2_list-4.png, README and Makefile
+lab2_list.gp, lab2_add.gp
+
+Decriptions of Files Included:
+lab2_add.c: C source code file that holds add function and options, that will output statistics for part 1
+SortedList.h: Header file that describes the doubly linked list operations
+SortedList.c: C source code file that implements all interfaces that are in SortedList.h
+lab2_list.c: C soure code file that will use the linked list and proccess information from user and output statistics 
+for part 2.
+lab2_add.csv: Contains all of the data from tests in Part 1.
+lab2_list.csv: Contains all of the data from test in Part 2.
+Makefile: Make file that does  
+    build        ----> compile all the programs with correct arguments
+    tests        ----> Run all tests for both the add and list programs and output to respective csv files.
+    graphs       ----> Uses gnuplot from the cvs files generate the proper graphs.
+    dist         ----> Creates a tarball with all of the files listed above.
+    clean        ----> Deletes all programs and output created by the Makefile
+README: This is this file, contains information about all other files and answers to questions.
+Graphs: 
+    lab2_add-1.png: Shows threads and iterations required to genereate a failure with and without yields
+    lab2_add-2.png: Average time per operation with and without yields
+    lab2_add-3.png: Average time per operation for a single thread with numerous iterations.
+    lab2_add-4.png: Threads and iterations that can run successfully run under multiple synchronization options.
+    lab2_add-5.png: Average time per operation for protected cases vs the number of threads.
+
+    lab2_list-1.png: Average time per unprotected operation vs multiple iterations for a single thread.
+    lab2_list-2.png: Threads and iterations needed to generate a failure with yields and without yields.
+    lab2_list-3.png: Iterations that can run without failure.
+    lab2_list-4.png: Adjusted cost per operations vs teh number of threads for the different kinds of synchronization options.
+lab2_list.gp: Will take lab2_list.csv data and use to create multiple plots.
+lab2_add.gp: Will take lab2_add.csv data and use to create multiple plots.
+
+
+QUESTION 2.1.1
+For me personally, I saw errors starting to occur around 1000 iterations. The reason why it takes many iterations 
+before errors are seen is because a large number of iterations almost guarantees that a thread cannot finish the 
+entire add function within its timeslice. Therefore, concurrency issues start to appear. Moreover, singificantly smaller
+number of iterations so seldom fail because a thread can complete all the iterations in its timeslice, outputting the 
+correctly value.
+
+QUESTION 2.1.2
+Yields runs are much slower because the thread is giving up the CPU and moving to the back of 
+the ready  queue, but before the thread does this there needs to be a context switch, which can become 
+very expensive if you are doing a lot of them. The man page even states that they can degrade performance.
+
+As mentioned before, the additional time is going towards the context switches.
+
+It is not possible to obtain valid per-operation timings if we are using yield. We cannot isolate the time 
+it takes for the +1 and -1 operations from the time it takes from the  context switch.
+
+
+QUESTION 2.1.3 
+The average cost per operation drops with increasing iterations because creating new threads does not interfere with
+the time of going through a higher number of iterations. Therefore, the time of going throught iterations grows at a
+higher rate than the running time of dealing with the threads.
+To find the correct cost, we can continually increase the number iterations, making the time we are dealing with the 
+threads insignificant. Therefore, we will eventually reach the actual cost per operation. 
+
+QUESTION 2.1.4
+For a low number of threads, each thread does not have to wait for too long; therefore, all 
+options perfom similarly. The three protected operations slow down as the number of threads rises
+since each thread will have to wait for a large amount of other threads to be done with the critical 
+section. 
+
+QUESTION 2.2.1
+In the adds, the time per mutex protected operation vs the number of threads seems to be a positively 
+correlated relationship, it is a slow climbing positive curve. On the other hand, when dealing with the list, this relationship is constant.
+In other words, the time per mutex protected operation is constant, the curve is a horizontal line. The reason why the curves are different 
+is because of how different in sizes the critical sections of these two cases are. 
+
+QUESTION 2.2.2 
+In terms of the list, the spin-locks as less scalable than the mutex lock since it increased with the increase of threads.
+This is also true for the part 1, but the curve increases at a faster rate. However, the spin lock does have a cheaper cost 
+for a fewer amount of threads. I believe that the spin lock has a faster increase since it will burn more cpu cycles, while a
+mutex will just put the threads to sleep.
+
+
+Sources:
+
+For learning how to use Mutex locks:
+https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/
+
+For learning how to use compare and swap:
+https://stackoverflow.com/questions/22339466/how-compare-and-swap-works
+
+For learning how to use spin lock:
+http://gcc.gnu.org/onlinedocs/gcc-4.4.3/gcc/Atomic-Builtins.html
+
+Really helpful website that helped me with pthread library:
+https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html

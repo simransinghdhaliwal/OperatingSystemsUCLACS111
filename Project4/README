@@ -1,0 +1,23 @@
+NAME: Simran Dhaliwal
+EMAIL: sdhaliwal@ucla.edu
+ID: 905361068
+
+FILES INCLUDE: 
+lab4c_tcp.c: C source code file of the tcp portion of the project. 
+
+lab4c_tls.c: C source code file of the tls portion of the project. 
+
+Makefile: Helps create the submission tarball and creates executables from the source code files.
+
+README: File containing information about the project.
+
+
+SOURCES AND RESEARCH:
+
+I first researched about socket programming again, using same guide as project 1a/b. 
+https://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html
+
+I used the following website to learn more about SSl programming. 
+https://aticleworld.com/ssl-server-client-using-openssl-in-c/
+
+

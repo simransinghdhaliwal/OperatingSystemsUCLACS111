@@ -1,0 +1,38 @@
+NAME: Simran Dhaliwal
+EMAIL: sdhaliwal@ucla.edu
+ID: 905361068
+
+Files Included:
+There are a total of 3 files, including this one that were submitted with this lab.
+
+1) lab1a.c
+This is the C source code for the lab. THe file holds all the features that were required in the lab.
+
+2) Makefile
+This is the Makefile that can be used to:
+     compile the program ----> make
+     clean the directory ----> make clean
+     make a tarball      ----> make dist (will create a .tar.gz of the three files).
+   
+3) README
+This is the file you are currently viewing, contains info about the project.
+
+
+
+
+Sources:
+
+(Preface: For research in this lab, I used piazza to guide me into making the right google searches)
+
+Before lab, I used this website to learn more about termios and to get a concrete example on how to use it
+https://www.gnu.org/software/libc/manual/html_node/Noncanon-Example.html
+
+To find out more about the execvp function and how to use it, I used the websites
+https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/execvp.htm
+http://www.cs.ecu.edu/karl/4630/sum01/example1.html
+
+In order to report the exit status of the shell, I used the function WEXITSTATUS that I learned through
+https://stackoverflow.com/questions/44528672/getting-the-exit-code-of-a-shell-script-in-a-c-program
+
+I used this website to found how to get the exit signal of the shell
+https://www.geeksforgeeks.org/wait-system-call-c/

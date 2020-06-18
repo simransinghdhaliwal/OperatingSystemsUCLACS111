@@ -1,0 +1,40 @@
+NAME: Simran Dhaliwal, Jason Lai
+ID: 905361068, 305426666
+EMAIL: sdhaliwal@ucla.edu, jasonyslai@g.ucla.edu
+
+-------------------------------------------------------------------------------
+Description of Included Files:
+
+lab3b.py
+    This is the python source file that audits file system reports given in
+    csv format. This program is made to run with Python 3, seeing as Python 2
+    has been deprecated. The program takes in one mandatory argument, which is 
+    the file to be audited.
+
+    The usage is as follows:
+        python3 lab3b.py fs_audit_report
+
+lab3b.sh
+    This shell script is used to run the python script. The Makefile will
+    create a link to this script in its default target. This functionality is
+    included solely for the grading script.
+
+Makefile
+    The Makefile for this project supports three targets:
+
+    (default): Creates a link to lab3b.sh named lab3b for the grading script
+    clean: Removes all files created by the Makefile
+    dist: Builds the submission tarball
+
+-------------------------------------------------------------------------------
+Testing Methodology:
+
+Testing with the provided trivial.csv file
+    The script behaves as expected on an unmodified trivial.csv file. For
+    different parts of the assignment, the trivial.csv file was modified to 
+    test if the script outputs the correct lines.
+
+Sanity Check:
+    This program passes the provided sanity check.
+
+-------------------------------------------------------------------------------

@@ -1,0 +1,94 @@
+NAME: Simran Dhaliwal
+EMAIL: sdhaliwal@ucla.edu
+ID: 905361068
+
+Files Included:
+lab2_list.c list.gp lab2b_list.csv lab2b_1.png lab2b_2.png lab2b_3.png lab2b_4.png lab2b_5.png
+SortedList.c SortedList.h README Makefile profile.out 
+
+File Descriptions:
+lab2_list.c: C source code for the lab, will do all functionality mentioned in the spec.
+list.gp: The script I wrote to make all of the plots specificied in the spec.
+SortedList.c: C source for for the doubly linked list implementation.
+SortedList.h: Interfaces for the doubly linked list.
+README: This file that holds infomation about the submission.
+lab2b_list.csv: CSV file that holds results of all the tests.
+Makefile: 
+    make build   -----> Compiles all the source to make lab2_list executable.
+    make graph   -----> Creates all necessary graphs using list.gp.
+    make tests   -----> Runs all the tests to populate lab2_list.csv.
+    make dist    -----> Creates a tarball with all the files mentioned above.
+    make clean   -----> Returns the directory to untarred state.
+    make profile -----> Runs gpertools to determine CPU usage for mutex lock test case, results in profile.out.
+profile.out: Contains information about the CPU usage for the test case mentioned in the spec.
+Graphs:
+    lab2b_1.png: Throughput vs. number of threads for mutex and spin-lock for synchronized list operations.
+    lab2b_2.png: Mean time per mutex wait and mean time per operation for mutex-synchronized list operations
+    lab2b_3.png: Sucessful iterations vs. threads for each synchronized partitioned lists.
+    lab2b_4.png: Throughput VS. number of threads for mutex synchronized partitioned lists.
+    lab2b_5.png: Throughput vs. number of threads for spin-lock synchronized partitioned lists.
+
+
+
+QUESTION 2.3.1
+Since the level of contention is far lower for 1 to 2 threads, I can comfortably say that most
+of the time in 1 and 2-thread list tests is spent  doing actual list  operations. There is 
+little wating for threads. I believe that list operations  are the most expensive parts of the code
+since they are  mostly what the program is doing for low thread counts.
+
+I believe that most of the CPU time is spent spinning (which is waitng) for high-thread 
+spin-lock tests. For high-thread mutex-lock test, I think that most of the time is 
+spent on doing list operations because non-working threads are put to sleep, instead of wasting cpu cycles. 
+
+QUESTION 2.3.2
+The portion for code that runs the most for spin lock synced test cases is the function that does the locking. 
+Therefore, we can assume that the line: while(__sync_lock_test_and_set(b,1) runs the most when
+there is a large number of threads. 
+
+This operation becomes so expensive since increasing the number of threads will cause there
+be a higher number of threads waiting for their time to run; therefore, the line above is ran 
+a lot of times.
+
+QUESTION 2.3.3
+The average lock-wait time rises to dramatically because there is only one lock, 
+and we are increasing the number of entities battling for that lock. I.e. if 
+there is 6 threads, 5 will be waiting. 
+
+The completion time per operation rises less dramatically because there is always
+one thread that is not waiting and performing its job. Therefore, we see an increase,
+but not an explosive increase as we see with the average lock-wait.
+
+The wait time per operation goes up with the number of threads running. For n threads,
+there will be n-1 theards waiting, increasing their waiting time. This relationship 
+is not really seen with the average time per operation since operations will continously
+execute, the only difference being that high thread count will mean more locking 
+and unlocking instructions. 
+
+QUESTION 2.3.4
+It seems that for both synchronized methods, as the number of lists increases, the operations per second
+stays at a constant to level across all threads. For instance, there is only a small performance decrease 
+between 1 and 16 threads for 16 lists. On the other hand, there is dramatic performance decrease between
+1 and 16 threads for 1 list. 
+
+The throughput will increase until a certain point. There will be a point where contention is already
+so minimal that increasing the number of lists will affect throughput.
+
+This does appear on the curves in a way. Increasing the number of sub-lists will increase the throughput
+since all of the operations would be carried out on a wide array of smaller lists. We would not see
+see the contention that we normally see with a high number of threads since each sub-list has its own lock.
+This reduced contention will be similar to the contention seen on a singular list with only a couple threads.
+Therefore, due to the reduced contention of having multiple lists each with their own lock, a N-way
+paritioned list would have similar throughput to a single list with fewer threads.  
+
+
+Sources:
+
+For learning how to use Mutex locks:
+https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/
+
+For learning how to use spin lock:
+http://gcc.gnu.org/onlinedocs/gcc-4.4.3/gcc/Atomic-Builtins.html
+
+Really helpful website that helped me with pthread library:
+https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
+

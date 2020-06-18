@@ -1,0 +1,43 @@
+NAME: Simran Dhaliwal, Jason Lai
+ID: 905361068, 305426666
+EMAIL: sdhaliwal@ucla.edu, jasonyslai@g.ucla.edu
+
+-------------------------------------------------------------------------------
+Description of Included Files
+
+lab3a.c
+    This file contains the source code for analyzing an EXT2 file system given
+    an image file.
+
+    The usage is as follows:
+        ./lab3a fs_image
+
+Makefile
+    The Makefile for this project contains 3 targets:
+
+    (default): Compiles the lab3a.c source 
+    clean: Removes all files created by the Makefile
+    dist: Builds the submission tarball
+
+-------------------------------------------------------------------------------
+Testing Methodology
+
+Testing with the provided EXT2_test.img
+    We looked out for any abnormal values and edge cases. Cases such as non-
+    ASCII file names, non-valid blocks, and unallocated areas does not seem to
+    make the program crash.
+
+Sanity Check
+    This program passes the provided sanity check.
+
+-------------------------------------------------------------------------------
+
+Sources:
+
+How we found a way to look at the bits in a byte.
+https://www.includehelp.com/c/how-to-check-a-particular-bit-is-set-or-not-using-c-program.aspx
+
+Where we learned to organize the time.
+http://www.cplusplus.com/reference/ctime/strftime/
+
+-------------------------------------------------------------------------------

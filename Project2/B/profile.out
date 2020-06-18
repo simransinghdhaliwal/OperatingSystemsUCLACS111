@@ -1,0 +1,130 @@
+Total: 1068 samples
+     959  89.8%  89.8%      959  89.8% lock
+      23   2.2%  91.9%       23   2.2% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:200
+      15   1.4%  93.4%       15   1.4% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:130
+      11   1.0%  94.4%       49   4.6% SortedList_lookup
+      10   0.9%  95.3%       10   0.9% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:1720
+      10   0.9%  96.3%       60   5.6% SortedList_insert
+       9   0.8%  97.1%        9   0.8% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:165
+       7   0.7%  97.8%        7   0.7% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:1721
+       7   0.7%  98.4%        7   0.7% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:1729
+       4   0.4%  98.8%        4   0.4% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:160
+       2   0.2%  99.0%        2   0.2% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:202
+       2   0.2%  99.2%        2   0.2% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:204
+       2   0.2%  99.3%        2   0.2% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:205
+       2   0.2%  99.5%        2   0.2% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:1730
+       2   0.2%  99.7%        2   0.2% _init
+       1   0.1%  99.8%        1   0.1% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:131
+       1   0.1%  99.9%        1   0.1% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:203
+       1   0.1% 100.0%        1   0.1% ?? /usr/src/debug////////glibc-2.17-c758a686/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:1714
+       0   0.0% 100.0%     1068 100.0% ?? /usr/src/debug////////glibc-2.17-c758a686/misc/../sysdeps/unix/sysv/linux/x86_64/clone.S:111
+       0   0.0% 100.0%     1068 100.0% list_helper
+       0   0.0% 100.0%     1068 100.0% start_thread
+ROUTINE ====================== list_helper in /u/cs/ugrad/dhaliwal/CS111/2b/lab2_list.c
+     0   1068 Total samples (flat / cumulative)
+     .      .  123:     __sync_lock_release(b);
+     .      .  124: }
+     .      .  125: 
+     .      .  126: 
+     .      .  127: //function that will be used with the threads
+---
+     .      .  128: void* list_helper(void *a){  
+     .      .  129:   struct timespec lock_start, lock_end;
+     .      .  130: 
+     .      .  131:   //a is the set of elements size of iterations that is pased in
+     .      .  132:   SortedListElement_t* b = a; //need to be converted from void* to SortedListElement_t*
+     .      .  133:   //critical section in sort into list
+     .      .  134: 
+     .      .  135:   int count1 = 0;
+     .      .  136:   for(; count1 < iteration_num; count1++){
+     .    605  137:     lock(&lock_start, &lock_end, &mutex, &spin_lock);
+     .     60  138:     SortedList_insert(&list, &b[count1]);
+     .      .  139:     unlock(&mutex, &spin_lock);
+     .      .  140:   }
+     .      .  141:   
+     .      .  142:   //critical section is to get length
+     .      4  143:   lock(&lock_start, &lock_end, &mutex, &spin_lock);
+     .      .  144:   int length = SortedList_length(&list);
+     .      .  145:   unlock(&mutex, &spin_lock);
+     .      .  146: 
+     .      .  147:   if(length < iteration_num)
+     .      .  148:     test_fail("SortListed_insert");
+     .      .  149: 
+     .      .  150:   //critical section is to search for element and delete it 
+     .      .  151:   
+     .      .  152:   int count2 = 0;
+     .      .  153:   for(count2 = 0; count2 < iteration_num; count2++){
+     .    350  154:     lock(&lock_start,&lock_end, &mutex, &spin_lock);
+     .      .  155:     const char* temp_key = b[count2].key;
+     .     49  156:     SortedListElement_t* search_element = SortedList_lookup(&list, temp_key);
+     .      .  157:     if(search_element == NULL)
+     .      .  158:       test_fail("SortedList lookup");
+     .      .  159:     int test_delete = SortedList_delete(search_element);
+     .      .  160:     if(test_delete == 1)
+     .      .  161:       test_fail("SortedList delete");
+     .      .  162:     unlock(&mutex, &spin_lock);
+     .      .  163:   }  
+     .      .  164: 
+     .      .  165:   
+     .      .  166:   return NULL;
+     .      .  167: }
+---
+     .      .  168: 
+     .      .  169: //function that will be used when there are more than one list
+     .      .  170: void* list_helper_multiple(void *a){  
+     .      .  171:   struct timespec lock_start, lock_end;
+     .      .  172:   //a is the set of elements size of iterations that is pased in
+ROUTINE ====================== list_helper in /u/cs/ugrad/dhaliwal/CS111/2b/lab2_list.c
+     0   1068 Total samples (flat / cumulative)
+     .      .  123:     __sync_lock_release(b);
+     .      .  124: }
+     .      .  125: 
+     .      .  126: 
+     .      .  127: //function that will be used with the threads
+---
+     .      .  128: void* list_helper(void *a){  
+     .      .  129:   struct timespec lock_start, lock_end;
+     .      .  130: 
+     .      .  131:   //a is the set of elements size of iterations that is pased in
+     .      .  132:   SortedListElement_t* b = a; //need to be converted from void* to SortedListElement_t*
+     .      .  133:   //critical section in sort into list
+     .      .  134: 
+     .      .  135:   int count1 = 0;
+     .      .  136:   for(; count1 < iteration_num; count1++){
+     .    605  137:     lock(&lock_start, &lock_end, &mutex, &spin_lock);
+     .     60  138:     SortedList_insert(&list, &b[count1]);
+     .      .  139:     unlock(&mutex, &spin_lock);
+     .      .  140:   }
+     .      .  141:   
+     .      .  142:   //critical section is to get length
+     .      4  143:   lock(&lock_start, &lock_end, &mutex, &spin_lock);
+     .      .  144:   int length = SortedList_length(&list);
+     .      .  145:   unlock(&mutex, &spin_lock);
+     .      .  146: 
+     .      .  147:   if(length < iteration_num)
+     .      .  148:     test_fail("SortListed_insert");
+     .      .  149: 
+     .      .  150:   //critical section is to search for element and delete it 
+     .      .  151:   
+     .      .  152:   int count2 = 0;
+     .      .  153:   for(count2 = 0; count2 < iteration_num; count2++){
+     .    350  154:     lock(&lock_start,&lock_end, &mutex, &spin_lock);
+     .      .  155:     const char* temp_key = b[count2].key;
+     .     49  156:     SortedListElement_t* search_element = SortedList_lookup(&list, temp_key);
+     .      .  157:     if(search_element == NULL)
+     .      .  158:       test_fail("SortedList lookup");
+     .      .  159:     int test_delete = SortedList_delete(search_element);
+     .      .  160:     if(test_delete == 1)
+     .      .  161:       test_fail("SortedList delete");
+     .      .  162:     unlock(&mutex, &spin_lock);
+     .      .  163:   }  
+     .      .  164: 
+     .      .  165:   
+     .      .  166:   return NULL;
+     .      .  167: }
+---
+     .      .  168: 
+     .      .  169: //function that will be used when there are more than one list
+     .      .  170: void* list_helper_multiple(void *a){  
+     .      .  171:   struct timespec lock_start, lock_end;
+     .      .  172:   //a is the set of elements size of iterations that is pased in
